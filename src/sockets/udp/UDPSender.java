@@ -1,54 +1,47 @@
 package sockets.udp;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.util.Scanner;
 
 public class UDPSender {
 
-  private DatagramSocket server;
-  private Socket connection;
-  private ObjectOutputStream output;
-  private ObjectInputStream input;
   private int port;
   private String destinName;
+  DatagramSocket sender;
+  Scanner scan = new Scanner(System.in);
 
   public UDPSender(int port, String destinName) throws IOException {
     this.port = port;
     this.destinName = destinName;
-    this.server = new DatagramSocket(port);
+    this.sender = new DatagramSocket();
   }
 
   public void run() throws IOException, ClassNotFoundException {
     InetAddress addr = InetAddress.getByName(destinName);
     System.out.println(String.format("Server listening to the port %d", this.port));
-  
-    while (true) {
-        byte[] msg = ((String) input.readObject()).getBytes();
+    String msg;
 
-        DatagramPacket pkg = new DatagramPacket(msg, msg.length, addr, port);
+    System.out.print("..: ");
+    msg = scan.nextLine();
 
-        DatagramSocket ds = new DatagramSocket();
-        ds.send(pkg);
+    DatagramPacket pkg = new DatagramPacket(msg.getBytes(), msg.getBytes().length, addr, port);
+    this.sender.send(pkg);
 
-        System.out.println("Mensagem enviada para: " + addr.getHostAddress());
+    System.out.println("Send message to: " + addr.getHostAddress() + "\n" +
+        "port: " + port + "\n" + "message: " + msg);
 
-        System.out.println("Connection terminated by the client.");
-        ds.close();
-        break;
-    }
+    System.out.println("Connection terminated.");
+    this.sender.close();
   }
 
   public static void main (String[] args) throws ClassNotFoundException{
     int port = 1100;
     try {
-        UDPSender server = new UDPSender(port, "kah");
-        server.run();
+        UDPSender sender = new UDPSender(port, "localhost");
+        sender.run();
     } catch (IOException e) {
         e.printStackTrace();
     }
