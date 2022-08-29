@@ -1,4 +1,4 @@
-package sockets.tcp;
+package sockets.udp;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -8,14 +8,14 @@ import java.net.UnknownHostException;
 import java.util.Scanner;
 
 
-public class TCPClient {
+public class UDPReceiver {
 
     private Socket client;
     private ObjectOutputStream output;
     private ObjectInputStream input;
     Scanner scan = new Scanner(System.in);
 
-    public TCPClient(int port) throws UnknownHostException, IOException{
+    public UDPReceiver(int port) throws UnknownHostException, IOException{
         client = new Socket("localhost", port);
     }
 
@@ -48,7 +48,7 @@ public class TCPClient {
     public static void main (String[] args) throws ClassNotFoundException{
         int port = 1100;
         try {
-            TCPClient client = new TCPClient(port);
+            UDPReceiver client = new UDPReceiver(port);
             client.run();
         } catch (IOException e) {
             e.printStackTrace();
