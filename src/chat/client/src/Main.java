@@ -3,13 +3,19 @@ import java.util.Scanner;
 
 import controller.ClientConnection;
 
-public class MainKah {
+public class Main {
     static ClientConnection connection;
     static Scanner scanner = new Scanner(System.in);
 
     public static void main(String args[]) {
+
+        System.out.print("Welcome to Magic Chat!\n" +
+                "Typing your name: ");
+
+        String clientName = scanner.nextLine();
+
         try {
-            connection = new ClientConnection("localhost", 6060, "Karol");
+            connection = new ClientConnection("localhost", 6060, clientName);
 
             while (true) {
                 String message = scanner.nextLine();
